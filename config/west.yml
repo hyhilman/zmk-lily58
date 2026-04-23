@@ -11,7 +11,7 @@ manifest:
   projects:
     - name: zmk
       remote: zmkfirmware
-      revision: v.03
+      revision: v0.3
       import: app/west.yml
     - name: mario-peripheral-animation
       remote: gpeye
@@ -21,6 +21,6 @@ manifest:
       revision: micro_spi2  
     - name: zmk-dongle-display
       remote: englmaxi
-      revision: v.03
+      revision: v0.3
   self:
     path: config
