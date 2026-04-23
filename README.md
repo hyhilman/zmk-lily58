@@ -37,6 +37,7 @@ Dan seterusnya <br>
 Setiap slot dapat menyimpan satu perangkat.
 
 
+
 📌 2. Simbol “X”
 Jika muncul ikon X, artinya:
 Slot tersebut pernah digunakan, tetapi
