@@ -1,5 +1,13 @@
 /*
- * Copyright (c) 2020 The ZMK Contributors
+ * Coding-focused keymap for Lily58 (macOS, vim, ghostty).
+ *
+ * Layers:
+ *   0 DEF — Base + home row mods (⌘ ⌥ ⌃) + Z hold = Window
+ *   1 NAV — vim arrows on HJKL, nav cluster, Mac clipboard, BT
+ *   2 SYM — symbols + F-keys + bracket cluster
+ *   3 WIN — macOS window/tab management
+ *
+ * Combos (Base only): Q+W=() E+R={} U+I=[] O+P=<>
  *
  * SPDX-License-Identifier: MIT
  */
@@ -9,67 +17,153 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/ext_power.h>
 
+#define DEF 0
+#define NAV 1
+#define SYM 2
+#define WIN 3
+
 &soft_off {
-    hold-time-ms = <3000>; // Only turn off it the key is held for 5 seconds or longer.
+    hold-time-ms = <3000>;
 };
 
 &soft_off {
     /delete-property/ split-peripheral-off-on-press;
 };
 
+&mt {
+    flavor = "tap-preferred";
+    tapping-term-ms = <200>;
+    quick-tap-ms = <125>;
+};
+
+&lt {
+    flavor = "hold-preferred";
+    tapping-term-ms = <200>;
+};
+
 / {
+    macros {
+        ap_paren: ap_paren {
+            label = "ZM_ap_paren";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LPAR &kp RPAR &kp LEFT>;
+        };
+        ap_brace: ap_brace {
+            label = "ZM_ap_brace";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LBRC &kp RBRC &kp LEFT>;
+        };
+        ap_brkt: ap_brkt {
+            label = "ZM_ap_brkt";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LBKT &kp RBKT &kp LEFT>;
+        };
+        ap_angle: ap_angle {
+            label = "ZM_ap_angle";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp LT &kp GT &kp LEFT>;
+        };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+
+        combo_paren {
+            timeout-ms = <50>;
+            key-positions = <13 14>;   // Q + W
+            bindings = <&ap_paren>;
+            layers = <DEF>;
+        };
+        combo_brace {
+            timeout-ms = <50>;
+            key-positions = <15 16>;   // E + R
+            bindings = <&ap_brace>;
+            layers = <DEF>;
+        };
+        combo_brkt {
+            timeout-ms = <50>;
+            key-positions = <19 20>;   // U + I
+            bindings = <&ap_brkt>;
+            layers = <DEF>;
+        };
+        combo_angle {
+            timeout-ms = <50>;
+            key-positions = <21 22>;   // O + P
+            bindings = <&ap_angle>;
+            layers = <DEF>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
-// ------------------------------------------------------------------------------------------------------------
-// |  ESC  |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |   `   |
-// |  TAB  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   |   -   |
-// |  CTRL |  A  |  S  |  D   |  F   |  G   |                   |  H   |  J    |  K    |  L   |   ;   |   '   |
-// | SHIFT |  Z  |  X  |  C   |  V   |  B   |   "["  |  |  "]"  |  N   |  M    |  ,    |  .   |   /   | SHIFT |
-//                     | ALT  | GUI  | LOWER|  ENTER |  | SPACE | RAISE| BSPC  | GUI   |
+// |  ESC  |  1   |  2   |  3   |  4   |  5   |              |  6   |  7   |  8   |  9   |  0   |  `   |
+// |  TAB  |  Q   |  W   |  E   |  R   |  T   |              |  Y   |  U   |  I   |  O   |  P   |  -   |
+// |  CTRL | A/⌘  | S/⌥  | D/⌃  |  F   |  G   |              |  H   |  J   | K/⌃  | L/⌥  | ;/⌘  |  '   |
+// | SK⇧   | Z/WIN|  X   |  C   |  V   |  B   | [ |    | ]   |  N   |  M   |  ,   |  .   |  /   |CAPSWD|
+//                       | ALT  | GUI  | NAV  |RET|    |SPC  | SYM  | BSP  | RGUI |
+//
+// Bottom-left outer: sticky shift (tap = next key shifted, auto-releases).
+// Bottom-right outer: caps_word (tap = capitalize the next word until space/punct).
             bindings = <
-&kp ESC   &kp N1 &kp N2 &kp N3   &kp N4   &kp N5                     &kp N6 &kp N7   &kp N8    &kp N9  &kp N0   &kp GRAVE
-&kp TAB   &kp Q  &kp W  &kp E    &kp R    &kp T                      &kp Y  &kp U    &kp I     &kp O   &kp P    &kp MINUS
-&kp LCTRL &kp A  &kp S  &kp D    &kp F    &kp G                      &kp H  &kp J    &kp K     &kp L   &kp SEMI &kp SQT
-&kp LSHFT &kp Z  &kp X  &kp C    &kp V    &kp B  &kp LBKT   &kp RBKT &kp N  &kp M    &kp COMMA &kp DOT &kp FSLH &kp RSHFT
-                        &kp LALT &kp LGUI &mo 1  &kp RET  &kp SPACE  &mo 2  &kp BSPC &kp RGUI
+&kp ESC    &kp N1       &kp N2       &kp N3       &kp N4   &kp N5                            &kp N6   &kp N7   &kp N8       &kp N9       &kp N0          &kp GRAVE
+&kp TAB    &kp Q        &kp W        &kp E        &kp R    &kp T                             &kp Y    &kp U    &kp I        &kp O        &kp P           &kp MINUS
+&kp LCTRL  &mt LGUI A   &mt LALT S   &mt LCTRL D  &kp F    &kp G                             &kp H    &kp J    &mt LCTRL K  &mt LALT L   &mt LGUI SEMI   &kp SQT
+&sk LSHFT  &lt WIN Z    &kp X        &kp C        &kp V    &kp B   &kp LBKT       &kp RBKT   &kp N    &kp M    &kp COMMA    &kp DOT      &kp FSLH        &caps_word
+                                     &kp LALT     &kp LGUI &mo NAV &kp RET        &kp SPACE  &mo SYM  &kp BSPC &kp RGUI
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
-        lower_layer {
-// ------------------------------------------------------------------------------------------------------------
-// | BTCLR | BT1 | BT2 |  BT3 |  BT4 |  BT5 |                   |      |       |       |      |       |       |
-// |  F1   |  F2 |  F3 |  F4  |  F5  |  F6  |                   |  F7  |  F8   |  F9   |  F10 |  F11  |  F12  |
-// |   `   |  !  |  @  |  #   |  $   |  %   |                   |  ^   |  &    |  *    |  (   |   )   |   ~   |
-// |       |     |     |      |      |      |        |  |       |      |  _    |  +    |  {   |   }   |  "|"  |
-//                     |      |      |      |        |  |       |      |       |       |
+        nav_layer {
+// | BTCLR | BT1  | BT2  | BT3  | BT4  | BT5  |              |      |      |      |      |      |      |
+// |       |      |      |      |      |      |              | HOME | PGDN | PGUP | END  |      |      |
+// |       | UNDO | CUT  | COPY | PASTE| REDO |              | LEFT | DOWN |  UP  |RIGHT |      |      |
+// |       |      |      |      |      |      |   |    |    |      |      |      | DEL  | INS  |      |
             bindings = <
-&bt BT_CLR &bt BT_SEL 0     &bt BT_SEL 1      &bt BT_SEL 2      &bt BT_SEL 3 &bt BT_SEL 4                 &trans    &trans    &trans          &trans    &trans    &trans
-&kp F1     &kp F2           &kp F3            &kp F4            &kp F5       &kp F6                       &kp F7    &kp F8    &kp F9          &kp F10   &kp F11   &kp F12
-&kp GRAVE  &kp EXCL         &kp AT            &kp HASH          &kp DOLLAR   &kp PRCNT                    &kp CARET &kp AMPS  &kp KP_MULTIPLY &kp LPAR  &kp RPAR  &kp TILDE
-&trans     &trans           &soft_off         &trans            &trans       &trans    &trans   &trans    &trans    &kp MINUS &kp KP_PLUS     &kp LBRC  &kp RBRC  &kp PIPE
-                                              &trans            &trans       &trans    &trans   &trans    &trans    &trans    &trans
+&bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                  &trans   &trans    &trans    &trans     &trans  &trans
+&trans     &trans       &trans       &trans       &trans       &trans                        &kp HOME &kp PG_DN &kp PG_UP &kp END    &trans  &trans
+&trans     &kp LG(Z)    &kp LG(X)    &kp LG(C)    &kp LG(V)    &kp LG(LS(Z))                 &kp LEFT &kp DOWN  &kp UP    &kp RIGHT  &trans  &trans
+&trans     &trans       &trans       &trans       &trans       &trans       &trans  &trans   &trans   &trans    &trans    &kp DEL    &kp INS &trans
+                                     &trans       &trans       &trans       &trans  &trans   &trans   &trans    &trans
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
         };
 
-        raise_layer {
-// ------------------------------------------------------------------------------------------------------------
-// |       |     |     |      |      |      |                   |      |       |       |      |       |       |
-// |   `   |  1  |  2  |  3   |  4   |  5   |                   |  6   |   7   |   8   |  9   |   0   |       |
-// |   F1  |  F2 |  F3 |  F4  |  F5  |  F6  |                   |      |   <-  |   v   |  ^   |  ->   |       |
-// |   F7  |  F8 |  F9 |  F10 |  F11 |  F12 |        |  |       |  +   |   -   |   =   |  [   |   ]   |   \   |
-//                     |      |      |      |        |  |       |      |       |       |
+        sym_layer {
+// |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |              |  F7  |  F8  |  F9  | F10  | F11  | F12  |
+// |      |  !   |  @   |  #   |  $   |  %   |              |  ^   |  &   |  *   |  (   |  )   |  ~   |
+// |      |  =   |  +   |  -   |  _   |  /   |              |  \   |  |   |  :   |  {   |  }   |  ?   |
+// |      |      |      |      |      |      |   |    |    |      |      |      |  <   |  >   |      |
             bindings = <
-&trans    &trans &trans &trans  &trans  &trans                       &trans      &trans    &trans    &trans   &trans    &trans
-&kp GRAVE &kp N1 &kp N2 &kp N3  &kp N4  &kp N5                       &kp N6      &kp N7    &kp N8    &kp N9   &kp N0    &trans
-&kp F1    &kp F2 &kp F3 &kp F4  &kp F5  &kp F6                       &trans      &kp LEFT  &kp DOWN  &kp UP   &kp RIGHT &trans
-&kp F7    &kp F8 &kp F9 &kp F10 &kp F11 &kp F12   &trans   &trans    &kp KP_PLUS &kp MINUS &kp EQUAL &kp LBKT &kp RBKT  &kp BSLH
-                        &trans  &trans  &trans    &trans   &trans    &trans      &trans    &trans
+&kp F1    &kp F2     &kp F3      &kp F4      &kp F5      &kp F6                              &kp F7    &kp F8    &kp F9     &kp F10  &kp F11  &kp F12
+&trans    &kp EXCL   &kp AT      &kp HASH    &kp DLLR    &kp PRCNT                           &kp CARET &kp AMPS  &kp ASTRK  &kp LPAR &kp RPAR &kp TILDE
+&trans    &kp EQUAL  &kp PLUS    &kp MINUS   &kp UNDER   &kp FSLH                            &kp BSLH  &kp PIPE  &kp COLON  &kp LBRC &kp RBRC &kp QMARK
+&trans    &trans     &trans      &trans      &trans      &trans     &trans       &trans      &trans    &trans    &trans     &kp LT   &kp GT   &trans
+                                 &trans      &trans      &trans     &trans       &trans      &trans    &trans    &trans
+            >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+        };
+
+        win_layer {
+// |      |      |      |      |      |      |              |  ⌘1  |  ⌘2  |  ⌘3  |  ⌘4  |  ⌘5  |  ⌘6  |
+// |      |  ⌘Q  |  ⌘W  |  ⌘H  |  ⌘N  |  ⌘T  |              |      |  ⌘[  |  ⌘]  |      |      |      |
+// |      |  ⌃←  |  ⌃→  |  ⌃↑  | ⌃⌘F  |      |              | ⌘⌥←  | ⌘⇧`  |  ⌘`  | ⌘⌥→  |      |      |
+// | ████ |      |  ⌘M  |  ⌘C  |  ⌘V  |      |   |    |    |      |      |      |      |      |      |
+            bindings = <
+&trans    &trans         &trans         &trans         &trans          &trans                              &kp LG(N1)        &kp LG(N2)        &kp LG(N3)        &kp LG(N4)         &kp LG(N5) &kp LG(N6)
+&trans    &kp LG(Q)      &kp LG(W)      &kp LG(H)      &kp LG(N)       &kp LG(T)                           &trans            &kp LG(LBKT)      &kp LG(RBKT)      &trans             &trans     &trans
+&trans    &kp LC(LEFT)   &kp LC(RIGHT)  &kp LC(UP)     &kp LG(LC(F))   &trans                              &kp LG(LA(LEFT))  &kp LG(LS(GRAVE)) &kp LG(GRAVE)     &kp LG(LA(RIGHT))  &trans     &trans
+&trans    &trans         &kp LG(M)      &kp LG(C)      &kp LG(V)       &trans     &trans       &trans      &trans            &trans            &trans         &trans             &trans     &trans
+                                        &trans         &trans          &trans     &trans       &trans      &trans            &trans            &trans
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
