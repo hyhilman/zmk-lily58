@@ -1,5 +1,126 @@
 ZMK Lily58 untuk Super Mini / Promicro Wireless NRF52840.
 
+## Keymap (Coding-focused: vim + ghostty + macOS)
+
+Custom 4-layer keymap with home row mods, sticky shift, caps word, and a
+dedicated macOS window-management layer.
+
+### Layer 0 — Base
+
+```
+,-----------------------------------------.                    ,-----------------------------------------.
+| ESC  |  1   |  2   |  3   |  4   |  5   |                    |  6   |  7   |  8   |  9   |  0   |  `   |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+| TAB  |  Q   |  W   |  E   |  R   |  T   |                    |  Y   |  U   |  I   |  O   |  P   |  -   |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+| CTRL |A / ⌘ |S / ⌥ |D / ⌃ |  F   |  G   |                    |  H   |  J   |K / ⌃ |L / ⌥ |; / ⌘ |  '   |
+|------+------+------+------+------+------+------.      .------+------+------+------+------+------+------|
+| SK⇧  |Z /WIN|  X   |  C   |  V   |  B   |  [   |      |  ]   |  N   |  M   |  ,   |  .   |  /   |CAPSWD|
+`-------------+------+------+------+------+------|      |------+------+------+------+------+-------------'
+                     | LALT | LGUI | NAV  |ENTER |      |SPACE | SYM  | BSPC | RGUI |
+                     `---------------------------'      `---------------------------'
+```
+
+- `A/⌘ S/⌥ D/⌃` and mirrored `K/⌃ L/⌥ ;/⌘` — **home row mods**: tap = letter, hold = modifier (Cmd / Option / Control).
+- `Z/WIN` — tap = `z`, hold = activate Window layer (Layer 3).
+- `SK⇧` — **sticky shift**: tap, next single key is shifted (no holding).
+- `CAPSWD` — **caps word**: tap, next word is capitalized until space/punctuation. Perfect for `MAX_RETRIES`, `JSON_PARSE`.
+- Inner thumb keys: `[` and `]` direct (vim text-objects stay one-tap).
+- Shift is intentionally NOT on home row — it gets held too often. Use `SK⇧` or `CAPSWD` instead.
+
+### Layer 1 — Lower / Nav (hold left thumb)
+
+```
+,-----------------------------------------.                    ,-----------------------------------------.
+| BTCLR| BT1  | BT2  | BT3  | BT4  | BT5  |                    |      |      |      |      |      |      |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |      |      |      |      |      |                    | HOME | PGDN | PGUP | END  |      |      |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      | UNDO | CUT  | COPY |PASTE | REDO |                    | LEFT | DOWN |  UP  |RIGHT |      |      |
+|------+------+------+------+------+------+------.      .------+------+------+------+------+------+------|
+|      |      |      |      |      |      |      |      |      |      |      |      | DEL  | INS  |      |
+`-------------+------+------+------+------+------|      |------+------+------+------+------+-------------'
+                     |      |      | ████ |      |      |      |      |      |      |
+                     `---------------------------'      `---------------------------'
+```
+
+- Right hand `HJKL` → arrow keys (vim spatial — works in any app).
+- Above arrows → `HOME / PGDN / PGUP / END`.
+- Left hand → Mac clipboard macros (Cmd+Z / X / C / V / Shift+Z).
+- Top row → Bluetooth controls.
+
+### Layer 2 — Raise / Symbols (hold right thumb)
+
+```
+,-----------------------------------------.                    ,-----------------------------------------.
+|  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |                    |  F7  |  F8  |  F9  | F10  | F11  | F12  |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |  !   |  @   |  #   |  $   |  %   |                    |  ^   |  &   |  *   |  (   |  )   |  ~   |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |  =   |  +   |  -   |  _   |  /   |                    |  \   |  |   |  :   |  {   |  }   |  ?   |
+|------+------+------+------+------+------+------.      .------+------+------+------+------+------+------|
+|      |      |      |      |      |      |      |      |      |      |      |      |  <   |  >   |      |
+`-------------+------+------+------+------+------|      |------+------+------+------+------+-------------'
+                     |      |      |      |      |      |      | ████ |      |      |
+                     `---------------------------'      `---------------------------'
+```
+
+- Bracket cluster on right cols 10–11: `()` row 2, `{}` row 3, `<>` row 4.
+- Programming-heavy left side row 3: `= + - _ /`.
+- F1–F12 on top row.
+
+### Layer 3 — Window (hold Z) — macOS window/tab management
+
+```
+,-----------------------------------------.                    ,-----------------------------------------.
+|      |      |      |      |      |      |                    | ⌘1   | ⌘2   | ⌘3   | ⌘4   | ⌘5   | ⌘6   |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      | ⌘Q   | ⌘W   | ⌘H   | ⌘N   | ⌘T   |                    |      | ⌘[   | ⌘]   |      |      |      |
+|      |QUIT  |CLOSE |HIDE  |NEW   |TAB   |                    |      |SPLIT←|SPLIT→|      |      |      |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      | ⌃←   | ⌃→   | ⌃↑   | ⌃⌘F  |      |                    | ⌘⌥←  | ⌘⇧`  | ⌘`   | ⌘⌥→  |      |      |
+|      |SPC←  |SPC→  |MISSN |FULL  |      |                    |TAB←  |WIN←  |WIN→  |TAB→  |      |      |
+|------+------+------+------+------+------+------.      .------+------+------+------+------+------+------|
+|      | ████ | ⌘M   | ⌘C   | ⌘V   |      |      |      |      |      |      |      |      |      |      |
+|      |      |MIN   |COPY  |PASTE |      |      |      |      |      |      |      |      |      |      |
+`-------------+------+------+------+------+------|      |------+------+------+------+------+-------------'
+                     |      |      |      |      |      |      |      |      |      |
+                     `---------------------------'      `---------------------------'
+```
+
+- Right hand `HJKL` → tab-prev / window-prev / window-next / tab-next (tabs horizontal, windows vertical).
+- Top right → `Cmd+1` … `Cmd+6` to jump to tab N directly.
+- Left hand row 2 → app actions (Quit / Close / Hide / New / NewTab).
+- Left hand row 3 → Spaces (`Ctrl+←` `Ctrl+→`), Mission Control (`Ctrl+↑`), Fullscreen (`Cmd+Ctrl+F`).
+- `⌘[` / `⌘]` → ghostty split nav (or browser back/forward).
+
+### Combos (active on Base layer only)
+
+Press two keys simultaneously (within 50ms):
+
+| Combo | Output |
+|---|---|
+| `Q` + `W` | `()` cursor between |
+| `E` + `R` | `{}` cursor between |
+| `U` + `I` | `[]` cursor between |
+| `O` + `P` | `<>` cursor between |
+
+### Tuning
+
+If home row mods misfire (letters fire as mods, or vice versa), adjust in `config/lily58.keymap`:
+
+```
+&mt {
+    flavor = "tap-preferred";
+    tapping-term-ms = <200>;   // raise = favors letters; lower = favors mods
+    quick-tap-ms = <125>;
+};
+```
+
+---
+
+## Original repo notes
+
 [ZMK STUDIO](https://zmk.studio/)
 Ada update baru ZMK Studio remapping tanpa perlu di flash 
 
